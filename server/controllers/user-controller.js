@@ -32,6 +32,16 @@ class UserController {
         }
     }
 
+    async activate(req, res, next) {
+        try {
+            const activationLink = req.params.link
+            await UserService.activate(activationLink)
+            return res.redirect(process.env.client_url)
+        } catch (error) {
+            next(error)
+        }
+    }
+
 }
 
 module.exports = new UserController()
