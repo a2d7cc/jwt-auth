@@ -3,14 +3,14 @@ const TokenModel = require('../models/token.model')
 
 
 class TokenService {
-    async generateTokens(payload) {
+     generateTokens(payload) {
         const accessToken = jwt.sign(payload, process.env.jwt_access_secret, { expiresIn: '15s' })
         const refreshToken = jwt.sign(payload, process.env.jwt_refresh_secret, { expiresIn: '30m' })
 
         return { accessToken, refreshToken }
     }
 
-    async validateAccessToken(token) {
+     validateAccessToken(token) {
         try {
             const userData = jwt.verify(token, process.env.jwt_access_secret)
             return userData
@@ -19,7 +19,7 @@ class TokenService {
         }
     }
 
-    async validateRefreshToken(token) {
+     validateRefreshToken(token) {
         try {
             const userData = jwt.verify(token, process.env.jwt_refresh_secret)
             return userData
@@ -34,17 +34,17 @@ class TokenService {
             tokenData.refreshToken = refreshToken
             return tokenData
         }
-        const token = TokenModel.create({user: userId, refreshToken})
+        const token = await TokenModel.create({user: userId, refreshToken})
         return token;
      }
 
     async findToken(refreshToken) {
-        const tokenData = TokenModel.findOne({refreshToken})
+        const tokenData = await TokenModel.findOne({refreshToken})
         return tokenData
      }
 
     async removeToken(refreshToken) {
-        const tokenData = TokenModel.deleteOne({refreshToken})
+        const tokenData = await TokenModel.deleteOne({refreshToken})
         return tokenData
     }
 }
