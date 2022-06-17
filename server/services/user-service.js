@@ -56,6 +56,11 @@ class UserService {
         user.isActivated = true
         await user.save()
     }
+
+    async logout(refreshToken) {
+        const token = await TokenService.removeToken(refreshToken)
+        return token
+    }
 }
 
 module.exports = new UserService()

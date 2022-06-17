@@ -9,5 +9,6 @@ body('password').isLength({ min: 5 }),
 UserController.registration)
 router.post('/login', UserController.login)
 router.get('/activate/:link', UserController.activate);
+router.post('/logout', UserController.logout)
 
 module.exports = router
