@@ -10,7 +10,7 @@ const app = express()
 const errorMidleware = require("./middlewares/error-middleware")
 
 
-app.use(cors())
+app.use(express.json())
 app.use(cookie())
 app.use(cors({
     credentials: true,
