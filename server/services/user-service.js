@@ -40,7 +40,6 @@ class UserService {
         const userDto = new UserDto(user)
         const tokens = TokenService.generateTokens({...userDto})
         await TokenService.saveToken(userDto.id, tokens.refreshToken)
-        console.log(tokens)
 
         return {
             ...userDto,
@@ -60,6 +59,23 @@ class UserService {
     async logout(refreshToken) {
         const token = await TokenService.removeToken(refreshToken)
         return token
+    }
+
+    async refresh(refreshToken) {
+        if(!refreshToken) {
+            throw ApiError.UnauthorizedError()
+        }
+        const userData = TokenService.validateRefreshToken(refreshToken)
+        const tokenFromDb = await User.findOne({refreshToken})
+        if(!userData || !tokenFromDb) {
+            throw ApiError.UnauthorizedError()
+        }
+        const user = await User.findById(userData.id)
+        const userDto = new UserDto(user)
+        const tokens = TokenService.generateTokens({...userDto})
+
+        await TokenService.saveToken(userDto.id, tokens.refreshToken)
+        return {...userDto, ...tokens}
     }
 }
 
