@@ -22,7 +22,7 @@ class UserService {
         const tokens = TokenService.generateTokens({...userDto})
         await TokenService.saveToken(userDto.id, tokens.refreshToken)
         return {
-            ...userDto,
+            user: userDto,
             ...tokens
         }
 
@@ -42,7 +42,7 @@ class UserService {
         await TokenService.saveToken(userDto.id, tokens.refreshToken)
 
         return {
-            ...userDto,
+            user: userDto,
             ...tokens
         }
     }
@@ -75,7 +75,7 @@ class UserService {
         const tokens = TokenService.generateTokens({...userDto})
 
         await TokenService.saveToken(userDto.id, tokens.refreshToken)
-        return {...userDto, ...tokens}
+        return { user:userDto, ...tokens }
     }
 
     async getAllUsers() {
